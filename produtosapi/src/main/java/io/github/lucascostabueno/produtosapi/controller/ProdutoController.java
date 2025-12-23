@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/produtos")
+@RequestMapping("produtos")
 public class ProdutoController {
 
     private ProdutoRepository produtoRepository;
@@ -30,4 +30,10 @@ public class ProdutoController {
     public Produto obterPorId(@PathVariable("id") String id) {
         return produtoRepository.findById(id).orElse(null);
     }
+
+    @DeleteMapping("{id}")
+    public void deletar(@PathVariable("id") String id) {
+        produtoRepository.deleteById(id);
+    }
+
 }
