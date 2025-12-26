@@ -1,5 +1,7 @@
 package io.github.lucascostabueno.arquiteturaspring.montadora;
 
+import io.github.lucascostabueno.arquiteturaspring.montadora.api.CarroStatus;
+
 import java.awt.*;
 
 public class Carro {
@@ -42,5 +44,12 @@ public class Carro {
 
     public void setMontadora(Montadora montadora) {
         this.montadora = montadora;
+    }
+
+    public CarroStatus darIgnicao(Chave chave) {
+        if(chave.getMontadora() != this.montadora){
+            return new CarroStatus ("Não é possível iniciar o carro com essa chave");
+        }
+        return new CarroStatus("Carro Ligado. Rodando com o motor " + motor);
     }
 }
