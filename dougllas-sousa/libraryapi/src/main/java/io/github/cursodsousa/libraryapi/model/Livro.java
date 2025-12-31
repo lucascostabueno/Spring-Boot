@@ -3,6 +3,7 @@ package io.github.cursodsousa.libraryapi.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -34,7 +35,7 @@ public class Livro {
     private GeneroLivro genero;
 
     @Column(name = "preco", precision = 18, scale = 2)
-    private Double preco;
+    private BigDecimal preco;
 
     @ManyToOne
     @JoinColumn(name = "id_autor")
