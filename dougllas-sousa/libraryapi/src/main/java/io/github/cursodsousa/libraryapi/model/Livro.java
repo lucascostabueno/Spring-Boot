@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Table(name = "livro", schema = "public")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "autor")
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor

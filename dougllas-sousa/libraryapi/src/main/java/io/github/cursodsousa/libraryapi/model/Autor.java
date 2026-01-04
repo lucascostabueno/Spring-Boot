@@ -11,7 +11,7 @@ import java.util.UUID;
 @Table(name = "autor", schema = "public")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "livros")
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
