@@ -15,17 +15,17 @@ import java.util.List;
 
 public interface LivroRepository extends JpaRepository<Livro, Integer>  {
 
-    List<Livro> FindByAutor(Autor autor);
+    List<Livro> findByAutor(Autor autor);
 
     List<Livro> findByTitulo(String titulo);
 
-    List<Livro> FindByIsbn(String isbn);
+    List<Livro> findByIsbn(String isbn);
 
     List<Livro> findByTituloAndPreco(String titulo, BigDecimal preco);
 
-    List<Livro> FindByTituloOrIsbn(String titulo, String isbn);
+    List<Livro> findByTituloOrIsbn(String titulo, String isbn);
 
-    List<Livro> FindByDataPublicacaoBetween (LocalDate inicio, LocalDate fim);
+    List<Livro> findByDataPublicacaoBetween (LocalDate inicio, LocalDate fim);
 
     @Query("select l from Livro as l order by l.titulo, l.preco")
     List<Livro> listarTodosOrdenadoPorTituloAndPreco();
