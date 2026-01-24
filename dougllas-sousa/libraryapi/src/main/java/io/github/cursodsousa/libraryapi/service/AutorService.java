@@ -21,4 +21,8 @@ public class AutorService {
     public Optional<Autor> obterPorId(Integer id) {
         return autorRepository.findById(id);
     }
+
+    public void deletar(Autor autor) {
+        autorRepository.delete(autor);
+    }
 }

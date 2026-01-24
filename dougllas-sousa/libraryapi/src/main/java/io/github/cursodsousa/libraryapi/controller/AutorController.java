@@ -51,4 +51,14 @@ public class AutorController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deletar(@PathVariable("id") Integer id) {
+        Optional<Autor> autorOptional = autorService.obterPorId(id);
+        if (autorOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        autorService.deletar(autorOptional.get());
+        return ResponseEntity.noContent().build();
+    }
 }
