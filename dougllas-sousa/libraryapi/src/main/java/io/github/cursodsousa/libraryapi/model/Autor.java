@@ -23,7 +23,7 @@ public class Autor {
     private Integer id;
 
     @Column(name = "nome", length = 100, nullable = false)
-    private String name;
+    private String nome;
 
     @Column(name = "data_nascimento", nullable = false)
     private LocalDate dataNascimento;
