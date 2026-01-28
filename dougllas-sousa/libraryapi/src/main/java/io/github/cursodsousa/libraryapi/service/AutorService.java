@@ -2,6 +2,7 @@ package io.github.cursodsousa.libraryapi.service;
 
 import io.github.cursodsousa.libraryapi.model.Autor;
 import io.github.cursodsousa.libraryapi.repository.AutorRepository;
+import io.github.cursodsousa.libraryapi.validator.AutorValidor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,12 +11,15 @@ import java.util.Optional;
 @Service
 public class AutorService {
     private final AutorRepository autorRepository;
+    private final AutorValidor autorValidor;
 
-    public AutorService(AutorRepository autorRepository) {
+    public AutorService(AutorRepository autorRepository, AutorValidor autorValidor) {
         this.autorRepository = autorRepository;
+        this.autorValidor = autorValidor;
     }
 
     public Autor salvar(Autor autor) {
+        autorValidor.validar(autor);
         return autorRepository.save(autor);
     }
 
@@ -23,6 +27,7 @@ public class AutorService {
         if(autor.getId() == null) {
             throw new IllegalArgumentException("Para atualizar, é necessário que o autor já esteja salvo na base");
         }
+        autorValidor.validar(autor);
          autorRepository.save(autor);
     }
 
