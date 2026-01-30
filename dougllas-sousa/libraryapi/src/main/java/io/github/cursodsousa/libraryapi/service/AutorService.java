@@ -5,22 +5,19 @@ import io.github.cursodsousa.libraryapi.model.Autor;
 import io.github.cursodsousa.libraryapi.repository.AutorRepository;
 import io.github.cursodsousa.libraryapi.repository.LivroRepository;
 import io.github.cursodsousa.libraryapi.validator.AutorValidor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
+@RequiredArgsConstructor
 public class AutorService {
     private final AutorRepository autorRepository;
     private final AutorValidor autorValidor;
     private final LivroRepository livroRepository;
-
-    public AutorService(AutorRepository autorRepository, AutorValidor autorValidor, LivroRepository livroRepository) {
-        this.autorRepository = autorRepository;
-        this.autorValidor = autorValidor;
-        this.livroRepository = livroRepository;
-    }
 
     public Autor salvar(Autor autor) {
         autorValidor.validar(autor);
