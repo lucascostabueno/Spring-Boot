@@ -2,6 +2,7 @@ package io.github.cursodsousa.libraryapi.controller;
 
 import io.github.cursodsousa.libraryapi.controller.dto.AutorDTO;
 import io.github.cursodsousa.libraryapi.controller.dto.ErroResposta;
+import io.github.cursodsousa.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import io.github.cursodsousa.libraryapi.exceptions.RegistroDuplicadoException;
 import io.github.cursodsousa.libraryapi.model.Autor;
 import io.github.cursodsousa.libraryapi.service.AutorService;
@@ -61,13 +62,18 @@ public class AutorController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deletar(@PathVariable("id") Integer id) {
-        Optional<Autor> autorOptional = autorService.obterPorId(id);
-        if (autorOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Object> deletar(@PathVariable("id") Integer id) {
+        try {
+            Optional<Autor> autorOptional = autorService.obterPorId(id);
+            if (autorOptional.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            autorService.deletar(autorOptional.get());
+            return ResponseEntity.noContent().build();
+        } catch (OperacaoNaoPermitidaException e) {
+            var erroResposta = ErroResposta.respostaPadrao(e.getMessage());
+            return ResponseEntity.status(erroResposta.status()).body(erroResposta);
         }
-        autorService.deletar(autorOptional.get());
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
@@ -87,18 +93,23 @@ public class AutorController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> atualizar(@PathVariable("id") Integer id, @RequestBody AutorDTO dto) {
-        Optional<Autor> autorOptional = autorService.obterPorId(id);
-        if (autorOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Object> atualizar(@PathVariable("id") Integer id, @RequestBody AutorDTO dto) {
+        try {
+            Optional<Autor> autorOptional = autorService.obterPorId(id);
+            if (autorOptional.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            var autor = autorOptional.get();
+            autor.setNome(dto.nome());
+            autor.setNacionalidade(dto.nacionalidade());
+            autor.setDataNascimento(dto.dataNascimento());
+
+            autorService.atualizar(autor);
+
+            return ResponseEntity.noContent().build();
+        } catch (RegistroDuplicadoException e) {
+            var erroDTO = ErroResposta.conflito(e.getMessage());
+            return ResponseEntity.status(erroDTO.status()).body(erroDTO);
         }
-        var autor = autorOptional.get();
-        autor.setNome(dto.nome());
-        autor.setNacionalidade(dto.nacionalidade());
-        autor.setDataNascimento(dto.dataNascimento());
-
-        autorService.atualizar(autor);
-
-        return ResponseEntity.noContent().build();
     }
 }
