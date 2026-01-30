@@ -92,7 +92,7 @@ public class AutorController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Object> atualizar(@PathVariable("id") Integer id, @RequestBody AutorDTO dto) {
+    public ResponseEntity<Object> atualizar(@PathVariable("id") @Valid Integer id, @RequestBody AutorDTO dto) {
         try {
             Optional<Autor> autorOptional = autorService.obterPorId(id);
             if (autorOptional.isEmpty()) {
