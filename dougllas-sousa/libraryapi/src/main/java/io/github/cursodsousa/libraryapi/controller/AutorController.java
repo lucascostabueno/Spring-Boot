@@ -2,6 +2,7 @@ package io.github.cursodsousa.libraryapi.controller;
 
 import io.github.cursodsousa.libraryapi.controller.dto.AutorDTO;
 import io.github.cursodsousa.libraryapi.controller.dto.ErroResposta;
+import io.github.cursodsousa.libraryapi.controller.mappers.AutorMapper;
 import io.github.cursodsousa.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import io.github.cursodsousa.libraryapi.exceptions.RegistroDuplicadoException;
 import io.github.cursodsousa.libraryapi.model.Autor;
@@ -23,11 +24,12 @@ import java.util.stream.Collectors;
 public class AutorController {
 
     private final AutorService autorService;
+    private final AutorMapper mapper;
 
     @PostMapping
     public ResponseEntity<Object> salvar(@RequestBody @Valid AutorDTO autor) {
         try {
-            Autor autorEntidade = autor.mapearParaAutor();
+            Autor autorEntidade = mapper.toEntity(autor);
             autorService.salvar(autorEntidade);
 
             // http://localhost:8080/autores/76e7c418-ccf9-4e2a-af20-c28b9e50ab55
@@ -46,18 +48,13 @@ public class AutorController {
 
     @GetMapping("{id}")
     public ResponseEntity<AutorDTO> obterDetalhes(@PathVariable("id") Integer id) {
-        Optional<Autor> autorOptional = autorService.obterPorId(id);
-        if(autorOptional.isPresent()){
-            Autor autor = autorOptional.get();
-            AutorDTO dto = new AutorDTO(
-                    autor.getId(),
-                    autor.getNome(),
-                    autor.getDataNascimento(),
-                    autor.getNacionalidade()
-            );
-            return ResponseEntity.ok(dto);
-        }
-        return ResponseEntity.notFound().build();
+
+        return autorService.
+                obterPorId(id)
+                .map(autor -> {
+                    AutorDTO dto = mapper.toDTO(autor);
+                    return ResponseEntity.ok(dto);
+                }).orElseGet(()-> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("{id}")
@@ -82,12 +79,9 @@ public class AutorController {
             List<Autor> resultado = autorService.pesquisaByExample(nome, nacionalidade);
             List<AutorDTO> lista = resultado
                     .stream()
-                    .map(autor -> new AutorDTO(
-                            autor.getId(),
-                            autor.getNome(),
-                            autor.getDataNascimento(),
-                            autor.getNacionalidade())
-                    ).collect(Collectors.toList());
+                    .map(mapper::toDTO)
+                    .collect(Collectors.toList());
+
         return ResponseEntity.ok(lista);
     }
 
