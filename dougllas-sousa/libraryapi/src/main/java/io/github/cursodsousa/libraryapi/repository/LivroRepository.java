@@ -4,6 +4,7 @@ import io.github.cursodsousa.libraryapi.model.Autor;
 import io.github.cursodsousa.libraryapi.model.GeneroLivro;
 import io.github.cursodsousa.libraryapi.model.Livro;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface LivroRepository extends JpaRepository<Livro, Integer>  {
+public interface LivroRepository extends JpaRepository<Livro, Integer>, JpaSpecificationExecutor<Livro> {
 
     List<Livro> findByAutor(Autor autor);
 
