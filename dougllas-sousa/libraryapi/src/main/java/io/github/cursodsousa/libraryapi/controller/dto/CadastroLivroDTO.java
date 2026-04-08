@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.ISBN;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 public record CadastroLivroDTO(
         @ISBN
@@ -16,10 +17,11 @@ public record CadastroLivroDTO(
         @NotBlank(message = "campo obrigatorio")
         String titulo,
         @NotNull(message = "campo obrigatorio")
-        @Past(message = "nao pode ser data futura")
+        @Past(message = "nao pode ser uma data futura")
         LocalDate dataPublicacao,
         GeneroLivro genero,
         BigDecimal preco,
         @NotNull(message = "campo obrigatorio")
-        Integer idAutor) {
+        UUID idAutor
+        ) {
 }

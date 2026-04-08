@@ -1,7 +1,9 @@
 package io.github.cursodsousa.libraryapi.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -15,17 +17,14 @@ import java.util.UUID;
 @Table(name = "autor", schema = "public")
 @Getter
 @Setter
-@ToString(exclude = "livros")
-@EqualsAndHashCode
-@NoArgsConstructor
-@AllArgsConstructor
+@ToString(exclude = {"livros"})
 @EntityListeners(AuditingEntityListener.class)
 public class Autor {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(name = "nome", length = 100, nullable = false)
     private String nome;
@@ -36,7 +35,9 @@ public class Autor {
     @Column(name = "nacionalidade", length = 50, nullable = false)
     private String nacionalidade;
 
-    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "autor", fetch = FetchType.LAZY
+//            , cascade = CascadeType.ALL
+    )
     private List<Livro> livros;
 
     @CreatedDate
@@ -48,5 +49,5 @@ public class Autor {
     private LocalDateTime dataAtualizacao;
 
     @Column(name = "id_usuario")
-    private Integer idUsuario;
+    private UUID idUsuario;
 }
